@@ -1,0 +1,12 @@
+---
+- name: enable opstools repo
+  yum_repository:
+    name: opstools
+    description: opstools testing repo
+    baseurl: https://buildlogs.centos.org/centos/7/opstools/x86_64/
+    gpgcheck: no
+
+- name: install opstools-repo file
+  package:
+    name: "centos-release-opstools"
+    state: present

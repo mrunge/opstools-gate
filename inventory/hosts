@@ -1,0 +1,2 @@
+target ansible_host=192.168.36.74 ansible_user=centos ansible_become=true
+test_target ansible_host=192.168.36.59 ansible_user=centos ansible_become=true

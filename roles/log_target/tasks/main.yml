@@ -1,0 +1,44 @@
+---
+- name: install fluentd
+  package:
+    name: fluentd
+    state: present
+
+- name: place fluent config
+  blockinfile:
+    state: present
+    dest: /etc/fluentd/fluent.conf
+    block: |
+      <source>
+        @type tail
+        format syslog
+        path /var/log/messages
+        tag test
+      </source>
+      <match **>
+        @type file
+        path /tmp/fluenttest
+      </match>
+
+- name: enable fluentd
+  service:
+    name: fluentd
+    state: started
+    enabled: yes
+
+- name: wait for fluentd to be started up
+  wait_for:
+    port: 24224
+    timeout: 30
+    state: started
+
+- name: find fluenttest file
+  find:
+    paths: "/tmp/"
+    patterns: "fluenttest*"
+    use_regex: True
+  register: st
+
+- fail:
+    msg: "Whoops, no output file"
+  when: st.matched == 0

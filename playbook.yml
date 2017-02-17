@@ -2,16 +2,26 @@
 - name: launch a vm
   hosts: localhost
   gather_facts: false
+  vars:
+    target_ip: 192.168.36.74
+    vm_name: myvm
   roles:
     - provision
 
 - name: install opstools-pm on that provisioned vm
   hosts: target
+  vars:
+    target_ip: 192.168.36.74
+    vm_name: myvm
   roles:
     - pm_target
+    - log_target
 
 - name: delete target vm
   hosts: localhost
   gather_facts: false
+  vars:
+    target_ip: 192.168.36.74
+    vm_name: myvm
   roles:
     - unprovision

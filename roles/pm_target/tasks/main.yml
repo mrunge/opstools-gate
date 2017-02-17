@@ -1,16 +1,4 @@
 ---
-- name: enable opstools repo
-  yum_repository:
-    name: opstools
-    description: opstools testing repo
-    baseurl: https://buildlogs.centos.org/centos/7/opstools/x86_64/
-    gpgcheck: no
-
-- name: install opstools-repo file
-  package:
-    name: "centos-release-opstools"
-    state: present
-
 - name: install helper programs
   package:
     name: "{{item}}"
@@ -30,15 +18,51 @@
     name: collectd
     state: present
 
-- name: install fluentd
-  package:
-    name: fluentd
-    state: present
+# collectd doesn't start in default config
+# if dns lookup doesn't work
+# we don't need dns here anyways
+- name: switch name lookup off
+  lineinfile:
+    dest: /etc/collectd.conf
+    regexp: '^#FQDNLookup.*?rue'
+    line: 'FQDNLookup    false'
+  notify: restart collectd
 
-- name: enable fluentd
+
+- name: start collectd
   service:
-    name: fluentd
+    name: collectd
     state: started
     enabled: yes
+
+- name: switch SELinux to permissive
+  selinux:
+    policy: targeted
+    state: permissive
+
+- name: place collectd cvs.conf file
+  copy:
+    src: cvs.conf
+    dest: /etc/collectd.d/
+  notify: restart collectd
+
+- name: enable cpu plugin
+  blockinfile:
+    dest: /etc/collectd.conf
+    block: |
+      <Plugin cpu>
+        ReportByCpu false
+        ReportByState false
+        ValuesPercentage false
+      </Plugin>
+  notify: restart collectd
+
+- name: reload collectd now
+  meta: flush_handlers
+
+- name: check if cvs file exists then
+  wait_for:
+    path: /var/tmp/collectd-values/
+    state: present
 
 

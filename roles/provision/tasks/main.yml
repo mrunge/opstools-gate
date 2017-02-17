@@ -7,7 +7,7 @@
       username: "{{username}}"
       password: "{{password}}"
       project_name: "{{project_name}}"
-    name: myvm
+    name: "{{vm_name}}"
     # rhel image
     # image: 5c796aa4-e97f-4b06-8646-711969c3b6e5
     # centos image
@@ -32,6 +32,8 @@
     delay: 30
 
 - name: check for ssh (2nd)
+  # ssh comes up, but sometimes fails for key injection
+  # adding a second check, to make things more stable.
   wait_for:
     port: 22
     host: "{{ target_ip }}"

@@ -3,6 +3,7 @@
   hosts: localhost
   gather_facts: false
   vars:
+    vm_name: test_vm
     target_ip: 192.168.36.59
   roles:
     - provision
@@ -11,6 +12,8 @@
   hosts: test_target
   vars:
     target_ip: 192.168.36.59
+    vm_name: test_vm
   roles:
     - pm_target
+    - log_target
 

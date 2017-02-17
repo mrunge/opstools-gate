@@ -7,5 +7,5 @@
       password: "{{password}}"
       project_name: "{{project_name}}"
     state: absent
-    name: myvm
+    name: "{{vm_name}}"
     timeout: 200

@@ -1,0 +1,6 @@
+---
+- name: delete target vm
+  hosts: localhost
+  gather_facts: False
+  roles:
+    - unprovision

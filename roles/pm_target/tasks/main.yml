@@ -1,0 +1,44 @@
+---
+- name: enable opstools repo
+  yum_repository:
+    name: opstools
+    description: opstools testing repo
+    baseurl: https://buildlogs.centos.org/centos/7/opstools/x86_64/
+    gpgcheck: no
+
+- name: install opstools-repo file
+  package:
+    name: "centos-release-opstools"
+    state: present
+
+- name: install helper programs
+  package:
+    name: "{{item}}"
+    state: present
+  with_items:
+    - vim
+    - git
+    - ansible
+
+- name: clone opstools-ansible
+  git:
+    repo: https://github.com/centos-opstools/opstools-ansible.git
+    dest: /var/tmp/opstools-ansible
+
+- name: install collectd
+  package:
+    name: collectd
+    state: present
+
+- name: install fluentd
+  package:
+    name: fluentd
+    state: present
+
+- name: enable fluentd
+  service:
+    name: fluentd
+    state: started
+    enabled: yes
+
+

@@ -1,0 +1,39 @@
+---
+- name: launch OpenStack VM
+  os_server:
+    state: present
+    auth:
+      auth_url: "{{auth_url}}"
+      username: "{{username}}"
+      password: "{{password}}"
+      project_name: "{{project_name}}"
+    name: myvm
+    # rhel image
+    # image: 5c796aa4-e97f-4b06-8646-711969c3b6e5
+    # centos image
+    image: 7f0c6d74-58cf-41b8-8bf5-4dfdf3803057
+    key_name: mrunge
+    flavor: m1.medium
+    volume_size: 40
+    floating_ips: "{{ target_ip }}"
+    terminate_volume: yes
+    wait: yes
+
+- name: remove ip from known hosts
+  known_hosts:
+    name: "{{ target_ip }}"
+    state: absent
+
+- name: check for ssh
+  wait_for:
+    port: 22
+    host: "{{ target_ip }}"
+    state: started
+    delay: 30
+
+- name: check for ssh (2nd)
+  wait_for:
+    port: 22
+    host: "{{ target_ip }}"
+    state: started
+    delay: 60

@@ -1,0 +1,11 @@
+---
+- name: delete OpenStack VM
+  os_server:
+    auth:
+      auth_url: "{{auth_url}}"
+      username: "{{username}}"
+      password: "{{password}}"
+      project_name: "{{project_name}}"
+    state: absent
+    name: myvm
+    timeout: 200

@@ -1,0 +1,17 @@
+---
+- name: launch a vm
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - provision
+
+- name: install opstools-pm on that provisioned vm
+  hosts: target
+  roles:
+    - pm_target
+
+- name: delete target vm
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - unprovision

@@ -39,6 +39,7 @@
     use_regex: True
   register: st
 
-- fail:
+- name: fail, if there's no output file
+  fail:
     msg: "Whoops, no output file"
   when: st.matched == 0

@@ -19,9 +19,12 @@ Create or modify the file `inventory/hosts`:
     vm_name: 
     image_uuid:
     
-vm_name can be set, it's the name for the vm to be used, you need to define the image uuid of the image to be launched.
+vm_name can be set, it's the name for the vm to be used, you need to define
+the image uuid of the image to be launched.
 
 # Run the playbook
 Finally, you're ready to run the playbook like this:
 
     ansible-playbook playbook.yml -e @config.yml
+
+`test.yml` is handy, if you want a vm to play around after some tests were run.

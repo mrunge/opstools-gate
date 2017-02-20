@@ -50,5 +50,3 @@
   wait_for:
     path: /var/tmp/collectd-values/
     state: present
-
-

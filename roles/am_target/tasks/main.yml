@@ -1,0 +1,44 @@
+---
+- name: install rabbitmq and sensu
+  package:
+    name: "{{item}}"
+    state: present
+  with_items:
+    - rabbitmq-server
+    - sensu
+    - redis
+
+- name: start rabbitmq
+  service:
+    name: rabbitmq-server
+    state: started
+
+- name: start redis
+  service:
+    name: redis
+    state: started
+
+- name: create config
+  copy:
+    src: api.json
+    dest: /etc/sensu/conf.d
+
+- name: start sensu server
+  service:
+    name: sensu-server
+    state: started
+
+- name: start sensu api
+  service:
+    name: sensu-api
+    state: started
+
+- name: start sensu-client
+  service:
+    name: sensu-client
+    state: started
+
+- name: curl sensu info
+  uri:
+    url: http://127.0.0.1:4567/health
+    status_code: 204

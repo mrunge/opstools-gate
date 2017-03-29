@@ -20,6 +20,11 @@
         path /tmp/fluenttest
       </match>
 
+- name: chmod /var/log/messages
+  file:
+    dest: /var/log/messages
+    mode: 0644
+
 - name: enable fluentd
   service:
     name: fluentd

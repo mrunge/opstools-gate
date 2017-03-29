@@ -13,6 +13,20 @@
     name: rabbitmq-server
     state: started
 
+- name: create sensu vhost on rabbitmq
+  rabbitmq_vhost:
+    name: "/sensu"
+    state: present
+
+- name: configure sensu rabbit permissions
+  rabbitmq_user:
+    user: 'sensu'
+    password: 'sensu'
+    vhost: '/sensu'
+    configure_priv: '.*'
+    read_priv: '.*'
+    write_priv: '.*'
+
 - name: start redis
   service:
     name: redis
